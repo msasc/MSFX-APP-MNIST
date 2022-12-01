@@ -16,13 +16,21 @@
 
 package com.msfx.app.mnist;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import com.msfx.lib.fx.Alert;
 import com.msfx.lib.fx.Buttons;
 import com.msfx.lib.fx.Frame;
+import com.msfx.lib.ml.data.ListPatternSource;
 import com.msfx.lib.util.Files;
 import com.msfx.lib.util.Numbers;
 import com.msfx.lib.util.res.FileStringRes;
 import com.msfx.lib.util.res.StringRes;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -41,11 +49,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * A simple number image viewer.
@@ -98,7 +101,9 @@ public class Viewer extends Application {
 		}
 
 		/* Read files. */
-		images = MNIST.read(fileLabels, fileImages);
+		ListPatternSource patterns = MNIST.read(fileLabels, fileImages);
+		images = new ArrayList<>();
+		while (patterns.hasNext()) { images.add((MNIST) patterns.next()); }
 
 		/* Build frame. */
 

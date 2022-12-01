@@ -16,6 +16,7 @@
 
 package com.msfx.app.mnist;
 
+import com.msfx.lib.ml.data.ListPatternSource;
 import com.msfx.lib.ml.data.Pattern;
 import com.msfx.lib.ml.function.Normalizer;
 
@@ -34,8 +35,8 @@ import java.util.List;
  */
 public class MNIST extends Pattern {
 
-	public static List<MNIST> read(File fileLabels, File fileImages) throws IOException {
-		List<MNIST> images = new ArrayList<>();
+	public static ListPatternSource read(File fileLabels, File fileImages) throws IOException {
+		List<Pattern> images = new ArrayList<>();
 
 		var fisLbl = new FileInputStream(fileLabels);
 		var bisLbl = new BufferedInputStream(fisLbl);
@@ -102,38 +103,30 @@ public class MNIST extends Pattern {
 		bisImg.close();
 		bisLbl.close();
 
-		return images;
+		return new ListPatternSource(images);
 	}
 
-	/**
-	 * Image rows.
-	 */
+	/** Image rows. */
 	public static final int ROWS = 28;
-	/**
-	 * Image columns.
-	 */
+	/** Image columns. */
 	public static final int COLS = 28;
-	/**
-	 * Number of input values of the pattern.
-	 */
+	/** Number of input values of the pattern. */
 	public static final int IN = ROWS * COLS;
-	/**
-	 * Number of output values of the pattern.
-	 */
+	/** Number of output values of the pattern. */
 	public static final int OUT = 10;
 
-	/**
-	 * The byte array of 28*28 = 784 elements.
-	 */
+	/** The byte array of 28*28 = 784 elements. */
 	private final int[][] image;
-	/**
-	 * The number.
-	 */
+	/** The number. */
 	private final int number;
+	
+	/** Input values. */
+	private final List<double[]> inputValues;
+	/** Output values. */
+	private final List<double[]> outputValues;
 
 	/**
 	 * Constructor assigning the number and the bytes.
-	 *
 	 * @param number The represented number
 	 * @param bytes  The raw bytes list
 	 */
@@ -191,40 +184,34 @@ public class MNIST extends Pattern {
 
 	/**
 	 * Returns the number.
-	 *
 	 * @return The number
 	 */
 	public int getNumber() { return number; }
 	/**
 	 * Returns the image as a two dimension byte array.
-	 *
 	 * @return The image
 	 */
 	public int[][] getImage() { return image; }
-
-	/**
-	 * Input values.
-	 */
-	private final List<double[]> inputValues;
-	/**
-	 * Output values.
-	 */
-	private final List<double[]> outputValues;
+	
 
 	/**
 	 * Return the pattern input values.
-	 *
 	 * @return The pattern input values.
 	 */
 	@Override
 	public List<double[]> getInputValues() { return inputValues; }
 	/**
 	 * Return the optional pattern output values.
-	 *
 	 * @return The pattern output values.
 	 */
 	@Override
 	public List<double[]> getOutputValues() { return outputValues; }
+	/**
+	 * Return the optional label.
+	 * @return The label.
+	 */
+	@Override
+	public String getLabel() { return toString(); }
 
 	/**
 	 * Returns the string representation.
