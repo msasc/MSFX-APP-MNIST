@@ -86,7 +86,7 @@ public class Trainer extends Application {
 
 		Network network = new Network();
 		int[] sizes = new int[] {
-				MNIST.ROWS * MNIST.COLS, 256, 256, 10
+				MNIST.ROWS * MNIST.COLS, 256, 10
 		};
 		List<Cell> cells = new ArrayList<>();
 		for (int i = 1; i < sizes.length; i++) {
@@ -110,7 +110,7 @@ public class Trainer extends Application {
 		trainer.setSourceTrain(sourceTrain);
 		trainer.setSourceTest(sourceTest);
 		trainer.setNetwork(network);
-		trainer.setEpochs(5);
+		trainer.setEpochs(200);
 
 		StringBuilder trainerTitle = new StringBuilder();
 		for (int i = 0; i < cells.size(); i++) {
@@ -141,6 +141,7 @@ public class Trainer extends Application {
 
 		PaneProgress pane = new PaneProgress(trainer);
 		pane.setRemoveAction(e -> frame.getPaneCombo().setCenter(null));
+		trainer.setConsole(pane.getConsole());
 
 		frame.getPaneCombo().getButtonBar().getButtons().add(close);
 		frame.getPaneCombo().setCenter(pane.getRoot());
